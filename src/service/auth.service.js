@@ -10,7 +10,8 @@ export default class AuthService {
             const result = await master.query(`
                     SELECT * FROM sige.user
                     WHERE email = $1
-                    AND status = true;`,
+                    AND status = true
+                    AND status_login = false;`,
                 [email]
             );
 
@@ -25,7 +26,14 @@ export default class AuthService {
                 throw new Error('Contrasena incorrecta.');
             }
 
+            await master.query(`
+                UPDATE sige."user"
+                SET status_login = true
+                WHERE id_user = $1
+            `, [user.id_user]);
+
             const { accessToken, refreshToken } = await generateTokens(user);
+
             const user_id = user.id_user;
             const emailUser = user.email;
             const nameUser = user.name + " " + user.last_name;
@@ -35,7 +43,7 @@ export default class AuthService {
                 accessToken,
                 refreshToken,
                 user: {
-                    id_user: user_id, 
+                    id_user: user_id,
                     name: nameUser,
                     email: emailUser,
                     role: roleUser
@@ -71,7 +79,7 @@ export default class AuthService {
 
             const user = result.rows[0];
             const { accessToken, refreshToken: newRefreshToken } = await generateTokens(user);
-            
+
             return { accessToken, newRefreshToken };
         } catch (error) {
             throw new Error(`Error al refrescar el token: ${error.message}`);
