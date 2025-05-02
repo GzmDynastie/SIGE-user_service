@@ -27,24 +27,6 @@ export default class AuthController {
         }
     }
 
-    static async logout(req, res) {
-        try {
-            const user_id = req.user.id_user; 
-            await AuthService.logout(user_id);
-    
-            res.clearCookie('refreshToken', {
-                httpOnly: true,
-                secure: true, 
-                sameSite: 'Strict',
-            });
-    
-            return res.status(200).json({ message: "Sesión cerrada correctamente." });
-        } catch (error) {
-            return res.status(500).json({ error: `Error al cerrar sesión: ${error.message}` });
-        }
-    }
-    
-
     // Controlador para refrescar el token
     static async refresh(req, res) {
         try {

@@ -26,12 +26,6 @@ export default class AuthService {
                 throw new Error('Contrasena incorrecta.');
             }
 
-            await master.query(`
-                UPDATE sige."user"
-                SET status_login = true
-                WHERE id_user = $1
-            `, [user.id_user]);
-
             const { accessToken, refreshToken } = await generateTokens(user);
 
             const user_id = user.id_user;

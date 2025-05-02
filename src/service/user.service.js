@@ -19,20 +19,6 @@ export default class UserService {
         } 
     }
 
-    static async logout(user_id) {
-        try {
-            await master.query(`
-                UPDATE sige."user"
-                SET status_login = false
-                WHERE id_user = $1
-            `, [user_id]);
-    
-            return { message: "Sesión cerrada correctamente." };
-        } catch (error) {
-            throw new Error(`Error al cerrar sesión: ${error.message}`);
-        }
-    }
-
     // Obtener todos los usuarios
     static async getAllUsers() {
         try {
