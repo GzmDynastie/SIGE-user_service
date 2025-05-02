@@ -10,8 +10,7 @@ export default class AuthService {
             const result = await master.query(`
                     SELECT * FROM sige.user
                     WHERE email = $1
-                    AND status = true
-                    AND status_login = false;`,
+                    AND status = true;`,
                 [email]
             );
 
